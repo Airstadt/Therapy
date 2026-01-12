@@ -3,102 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compassionate Therapy | Positioning Mode</title>
+    <title>Compassionate Therapy | Dynamic Content</title>
     
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: sans-serif;
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f0f0;
+            overflow: hidden;
+            color: #333;
         }
 
-        /* The Main Landscape Background */
         .bg-wrapper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            background: url('images/therapy_header_image_notext_rev4.png');
+            background: url('images/therapy_header_image_notext_rev4.png') no-repeat center center;
             background-size: cover;
-            background-position: center;
         }
 
-        /* The Brain Container */
-        /* This is positioned exactly where the nodes were previously */
-        #brain-zone {
-            position: absolute;
-            top: 40%;
-            left: 20%;
-            transform: translate(-50%, -50%);
-            width: 800px;  /* Adjusted size to fit a brain image comfortably */
-            height: 800px;
+        /* --- EXPANDING GLASS MENU --- */
+        .nav-container {
+            position: fixed;
+            top: 30px; right: 40px;
+            z-index: 1000;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             
-            /* Add the brain image here */
-            background: url('images/brain_image-removebg-preview.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            
-            z-index: 10;
+            /* Collapsed dimensions */
+            width: 70px; 
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .menu-label {
+            color: #fff;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-right: 25px;
+            user-select: none;
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
             pointer-events: none;
         }
 
-        /* Super Bright Test Nodes - Now children of the brain-zone */
-        .node {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border-radius: 50%;
-            /* Glowing effect */
-            box-shadow: 0 0 25px 10px rgba(255, 255, 255, 1), 0 0 40px 20px rgba(160, 255, 140, 0.6);
-            animation: float 6s infinite ease-in-out;
+        /* State when menu is clicked */
+        .nav-menu.active {
+            width: 480px; /* Adjust this width based on link text length */
+            background: rgba(255, 255, 255, 0.25);
         }
 
-        /* Positioning nodes to appear INSIDE the brain image */
-        .node:nth-child(1) { top: 35%; left: 30%; }
-        .node:nth-child(2) { top: 60%; left: 65%; animation-delay: -2s; }
-        .node:nth-child(3) { top: 45%; left: 50%; animation-delay: -4s; }
-        .node:nth-child(4) { top: 25%; left: 55%; animation-delay: -1s; }
+        .nav-menu.active .menu-items {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nav-menu li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            padding: 8px 12px;
+            transition: 0.3s;
+        }
+
+        .nav-menu li a:hover {
+            color: #a0ff8c;
+        }
+
+        /* --- SEMI-TRANSPARENT GLASS CONTENT SECTION --- */
+        #main-content-area {
+            position: absolute;
+            top: 50%;
+            left: 65%; /* Positioned further right to balance the brain graphic */
+            transform: translate(-50%, -50%);
+            
+            /* ADJUST WIDTH HERE */
+            width: 650px; 
+            
+            min-height: 300px;
+            z-index: 20;
+            padding: 50px;
+
+            /* Glassmorphism Logic */
+            background: rgba(255, 255, 255, 0.12); 
+            backdrop-filter: blur(20px) saturate(160%); 
+            -webkit-backdrop-filter: blur(20px) saturate(160%); 
+            
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        .content-fade {
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #main-content-area h2 { 
+            margin-top: 0; 
+            color: #a0ff8c; 
+            font-size: 2.4rem;
+        }
+        
+        #main-content-area p { 
+            line-height: 1.8; 
+            color: #ffffff; 
+            font-size: 1.15rem;
+        }
+
+        /* --- BRAIN & NODES --- */
+        #brain-zone {
+            position: absolute;
+            top: 40%; left: 20%;
+            transform: translate(-50%, -50%);
+            width: 800px; height: 800px;
+            background: url('images/brain_image-removebg-preview.png') no-repeat center;
+            background-size: contain;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .node {
+            position: absolute; width: 12px; height: 12px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 0 25px 10px #fff, 0 0 40px 20px rgba(160, 255, 140, 0.6);
+            animation: float 6s infinite ease-in-out;
+        }
+        /* Tightened Node Positions */
+        .node:nth-child(1) { top: 40%; left: 38%; }
+        .node:nth-child(2) { top: 55%; left: 58%; animation-delay: -2s; }
+        .node:nth-child(3) { top: 48%; left: 48%; animation-delay: -4s; }
+        .node:nth-child(4) { top: 35%; left: 52%; animation-delay: -1s; }
+        .node:nth-child(5) { top: 52%; left: 42%; animation-delay: -3s; }
+        .node:nth-child(6) { top: 42%; left: 60%; animation-delay: -5s; }
+        .node:nth-child(6) { top: 45%; left: 58%; animation-delay: -6s; }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0); opacity: 0.7; }
-            50% { transform: translate(10px, -15px); opacity: 1; }
-        }
-
-        /* Calibration Instructions */
-        .instructions {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 8px;
-            z-index: 100;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            50% { transform: translate(8px, -12px); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
+    <nav class="nav-container">
+        <ul class="nav-menu" id="expandable-menu" onclick="toggleMenu()">
+            <li class="menu-label">Menu</li>
+            <div class="menu-items">
+                <li><a onclick="updateContent('home'); event.stopPropagation();">Home</a></li>
+                <li><a onclick="updateContent('approach'); event.stopPropagation();">Approach</a></li>
+                <li><a onclick="updateContent('services'); event.stopPropagation();">Services</a></li>
+                <li><a onclick="updateContent('contact'); event.stopPropagation();">Contact</a></li>
+            </div>
+        </ul>
+    </nav>
+
     <div class="bg-wrapper">
         <div id="brain-zone">
-            <div class="node"></div>
-            <div class="node"></div>
-            <div class="node"></div>
-            <div class="node"></div>
+            <div class="node"></div><div class="node"></div>
+            <div class="node"></div><div class="node"></div>
+            <div class="node"></div><div class="node"></div>
+        </div>
+
+        <div id="main-content-area">
+            <div id="dynamic-wrapper" class="content-fade">
+                <h2>Welcome</h2>
+                <p>Select an option from the menu to explore our compassionate therapy practices. Our approach focuses on neurological harmony and emotional well-being.</p>
+            </div>
         </div>
     </div>
 
-    <div class="instructions">
-        <b>Calibration Mode</b><br>
-        The <b>brain_image_v1.png</b> is now layered under the nodes.<br>
-        Adjust the <code>top</code> and <code>left</code> of <code>#brain-zone</code> to move the whole unit.
-    </div>
+    <script>
+        // Data for dynamic swapping
+        const contentData = {
+            home: {
+                title: "Welcome",
+                text: "Select an option from the menu to explore our compassionate therapy practices. Our approach focuses on neurological harmony and emotional well-being."
+            },
+            approach: {
+                title: "Our Approach",
+                text: "We utilize evidence-based techniques combined with a deep understanding of neuroplasticity. By targeting the 'nodes' of emotional response, we help rewrite internal narratives."
+            },
+            services: {
+                title: "Specialized Services",
+                text: "From cognitive behavioral therapy to mindfulness-based stress reduction, we offer a range of services tailored to your individual journey."
+            },
+            contact: {
+                title: "Get In Touch",
+                text: "Ready to start your journey? Reach out today for a consultation. We are here to listen and guide you toward a more balanced life."
+            }
+        };
 
+        // Function to update the glass content area
+        function updateContent(key) {
+            const container = document.getElementById('dynamic-wrapper');
+            
+            // Re-trigger fade-in animation
+            container.classList.remove('content-fade');
+            void container.offsetWidth; 
+            container.classList.add('content-fade');
+
+            // Inject new text
+            container.innerHTML = `
+                <h2>${contentData[key].title}</h2>
+                <p>${contentData[key].text}</p>
+            `;
+        }
+
+        // Logic for expanding the Menu pill
+        function toggleMenu() {
+            const menu = document.getElementById('expandable-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu if user clicks anywhere else on the screen
+        window.onclick = function(event) {
+            const menu = document.getElementById('expandable-menu');
+            if (!menu.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        }
+    </script>
 </body>
 </html>
