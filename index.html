@@ -40,8 +40,39 @@
             background: url('images/therapy_header_image_notext_rev5.png') no-repeat center center;
             background-size: cover;
         }
+/* --- QUOTE ROTATOR --- */
+.quote-rotator {
+    position: fixed;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    animation: fadeSlide 5s ease;
+    width: 80%;
+    max-width: 600px;
+}
 
-        /* --- EXPANDING GLASS MENU --- */
+#quote-author {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+@keyframes fadeSlide {
+    0% { opacity: 0; transform: translate(-50%, -10px); }
+    100% { opacity: 1; transform: translate(-50%, 0); }
+}
+#quote-text, #quote-author { 
+    transition: opacity 1s ease; 
+}
+
+/* --- EXPANDING GLASS MENU --- */
         .nav-container {
             position: fixed;
             top: 30px; right: 40px;
@@ -54,7 +85,7 @@
             list-style: none;
             padding: 10px 20px;
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50px;
@@ -63,6 +94,7 @@
             width: 70px; 
             overflow: hidden;
             white-space: nowrap;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
         }
 
         .menu-label {
@@ -116,9 +148,8 @@
             background: rgba(255, 255, 255, 0.12); 
             backdrop-filter: blur(20px) saturate(160%); 
             -webkit-backdrop-filter: blur(20px) saturate(160%); 
-            border: 1px solid rgba(255, 255, 255, 0.3); 
             border-radius: 30px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0px 50px rgba(7, 49, 7, 0.4);
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             transition: all 0.5s ease;
@@ -181,6 +212,10 @@
     
 
     <nav class="nav-container">
+        <div class="quote-rotator"> 
+            <p id="quote-text"></p> <span id="quote-author"></span>
+        </div>
+
         <ul class="nav-menu" id="expandable-menu" onclick="toggleMenu()">
             <li class="menu-label">Menu</li>
             <div class="menu-items">
@@ -249,6 +284,38 @@
                 menu.classList.remove('active');
             }
         }
+    </script>
+    <script>
+        const quotes = [
+    { text: "Act as if what you do makes a difference. It does.", author: "William James" },
+    { text: "With the new day comes new strength and new thoughts.", author: "Eleanor Roosevelt" },
+    { text: "What lies behind us and what lies before us are tiny matters compared to what lies within us.", author: "Ralph Waldo Emerson" },
+    { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" }
+    ];
+
+                let quoteIndex = 0;
+
+                function rotateQuotes() {
+                    const quoteText = document.getElementById("quote-text");
+                    const quoteAuthor = document.getElementById("quote-author");
+
+                    quoteText.style.opacity = 0;
+                    quoteAuthor.style.opacity = 0;
+
+                    setTimeout(() => {
+                        quoteText.textContent = `"${quotes[quoteIndex].text}"`;
+                        quoteAuthor.textContent = `— ${quotes[quoteIndex].author}`;
+
+                        quoteText.style.opacity = 1;
+                        quoteAuthor.style.opacity = 1;
+
+                        quoteIndex = (quoteIndex + 1) % quotes.length;
+                    }, 1000);
+                }
+
+    setInterval(rotateQuotes, 6000);
+    rotateQuotes();
+
     </script>
 </body>
 </html>
